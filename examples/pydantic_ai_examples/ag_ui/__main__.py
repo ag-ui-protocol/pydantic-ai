@@ -6,4 +6,4 @@ See https://ai.pydantic.dev/examples/ag-ui/ for more information.
 if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run('pydantic_ai_examples.ag_ui:app', port=9000)
+    uvicorn.run('pydantic_ai_examples.ag_ui:app', host='0.0.0.0', port=9000)

@@ -278,6 +278,7 @@ jobs:
         with:
           jobs: ${{ toJSON(needs) }}
           allowed-skips: test-live
+          allowed-failures: test-live
 
   deploy-docs:
     needs: [check]

@@ -75,8 +75,10 @@ jobs:
           commit: ${{ github.event.workflow_run.head_sha }}
           allow_forks: true
           workflow_conclusion: completed
+          if_no_artifact_found: warn
 
       - uses: cloudflare/wrangler-action@v3
+        if: hashFiles('site/**') != ''
         id: deploy
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -92,6 +94,7 @@ jobs:
           GITHUB_EVENT_JSON: ${{ toJSON(github.event) }}
 
       - name: Set preview URL
+        if: steps.deploy.outcome == 'success'
         run: uv run --no-project --with httpx .github/set_docs_pr_preview_url.py
         env:
           DEPLOY_OUTPUT: ${{ steps.deploy.outputs.command-output }}

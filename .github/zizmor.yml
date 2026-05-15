@@ -1,0 +1,24 @@
+rules:
+  dangerous-triggers:
+    ignore:
+      # Dependabot auto-merge: uses pull_request_target for write token.
+      # Does NOT checkout PR code. Actor-gated to dependabot[bot].
+      - dependabot-auto-merge.yml
+      # Dependabot major analysis: uses pull_request_target for PR comments.
+      # Does NOT checkout PR code. Actor-gated to dependabot[bot].
+      - dependabot-major-analysis.yml
+      # Pre-existing: after-ci.yml uses workflow_run to post coverage/results
+      # after CI completes. Internal workflow, does not expose secrets to PR authors.
+      - after-ci.yml
+
+  # Upstream pattern: setup-uv/setup-node enable-cache has no custom key
+  # prefix input, so fork-check prefixing is not possible without replacing
+  # with manual actions/cache steps (large upstream divergence).
+  # Risk is mitigated: ci.yml triggers on push+PR (cache scoped per ref),
+  # manually-deploy-docs.yml is workflow_dispatch only (no fork access),
+  # after-ci.yml is workflow_run only (no direct fork trigger).
+  cache-poisoning:
+    ignore:
+      - after-ci.yml
+      - ci.yml
+      - manually-deploy-docs.yml
